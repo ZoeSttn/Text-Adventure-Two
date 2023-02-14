@@ -1,3 +1,37 @@
+:root {
+  --main-background: #111111;
+  --main-text: #51f029;
+  --dark-grey: #5c5c5c;
+}
+
 body {
   font-family: "Mukta", sans-serif;
+  background-color: var(--main-background);
+  color: var(--main-text);
+}
+
+.text-display {
+  height: 70%;
+}
+
+.user-text-input,
+.user-text-submit {
+  background-color: var(--main-background);
+  border-top: 2px solid var(--dark-grey);
+  border-right: none;
+  border-bottom: none;
+  border-left: none;
+}
+
+.user-text-input {
+  color: var(--main-text);
+}
+
+::placeholder {
+  color: var(--dark-grey);
+}
+
+.user-text-submit {
+  font-weight: 600;
+  color: var(--dark-grey);
 }
