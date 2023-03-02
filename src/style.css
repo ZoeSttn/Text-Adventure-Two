@@ -5,13 +5,18 @@
 }
 
 body {
-  font-family: "Mukta", sans-serif;
+  font-family: 'Roboto Mono', monospace;
   background-color: var(--main-background);
   color: var(--main-text);
 }
 
+.container {
+  margin: 0 auto;
+}
+
 .text-display {
-  height: 70%;
+  padding: 30px 10px 10px 10px;
+  height: 500px;
 }
 
 .user-text-input,
@@ -25,6 +30,7 @@ body {
 
 .user-text-input {
   color: var(--main-text);
+  width: 85%;
 }
 
 ::placeholder {
