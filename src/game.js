@@ -2,10 +2,11 @@ let locations = {
   clearing: {
     displayText: "You are in a clearing",
     actions: {
-      goToForest: function () {
+      forest: function () {
         movePlayer("forest");
         showText(locations.forest.displayText, "game");
         console.log(locations.playerLocation);
+        console.log("success");
       },
     },
   },
@@ -23,17 +24,23 @@ let locations = {
 
 function readUserCommand(event) {
   event.preventDefault();
-  let userCommand = document.querySelector("#user-text-input").value;
-
+  let userCommand = document
+    .querySelector("#user-text-input")
+    .value.toLowerCase();
+  console.log(userCommand);
   showText(userCommand, "user");
 
-  let possible = locations[locations.playerLocation].keys();
+  let currentArea = locations.playerLocation;
 
-  //make array of possible keys
-  //Check command contains key
-  //Run command
+  let possibleKeys = Object.keys(locations[currentArea].actions);
+  console.log(possibleKeys);
 
-  //showText(userCommand, user);
+  for (let i = 0; i < possibleKeys.length; i++) {
+    if (userCommand.includes(possibleKeys[i])) {
+      let command = possibleKeys[i];
+      locations[currentArea].actions[command]();
+    }
+  }
 
   userCommand.value = "";
 }
