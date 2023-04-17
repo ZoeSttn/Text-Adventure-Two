@@ -1,65 +1,67 @@
-let locations = {
-  clearing: {
-    displayText: "You are in a clearing",
-    actions: {
-      forest: function () {
-        movePlayer("forest");
-        showText(locations.forest.displayText, "game");
-        console.log(locations.playerLocation);
-        console.log("success");
-      },
-    },
-  },
-  forest: {
-    displayText: "You are in a forest",
-    actions: {
-      goToClearing: function () {
-        movePlayer("clearing");
-        showText(locations.forest.displayText);
-      },
-    },
-  },
-  playerLocation: "clearing",
+//Object for player, map, users screen, monster
+//Ideas: You could choose your stats at the beginning of the game to facilitate different play styles
+//Player health
+
+class MapLocations {
+  constructor(displayText, items, accessibleLocations, actions) {
+    this.displayText = displayText;
+    this.items = items;
+    this.accessibleLocations = accessibleLocations;
+    this.actions = actions;
+  }
+}
+
+function createLocations(
+  name,
+  displayText,
+  items,
+  accessibleLocations,
+  actions
+) {
+  let loc = new MapLocations(displayText, items, accessibleLocations, actions);
+  map.mapLocations[name] = loc;
+}
+
+let map = {
+  mapLocations: {},
 };
 
-function readUserCommand(event) {
-  event.preventDefault();
-  let userCommand = document
-    .querySelector("#user-text-input")
-    .value.toLowerCase();
-  console.log(userCommand);
-  showText(userCommand, "user");
+let player = {
+  currentLocation: "clearing",
 
-  let currentArea = locations.playerLocation;
+  updatePlayerLocation(newLocation) {
+    player.currentLocation = newLocation;
+  },
+};
 
-  let possibleKeys = Object.keys(locations[currentArea].actions);
-  console.log(possibleKeys);
+let playerScreen = {
+  playerTextInput: document.querySelector("#user-text-input"),
+  playerCommand: "",
+  textDisplay: document.querySelector("#text-display"),
+  showInTextDisplay(event) {
+    event.preventDefault();
+    let format = "hey";
+    let message = "hi";
+    playerScreen.textDisplay.innerHTML += `<br />${format}${message}`;
+  },
+};
 
-  for (let i = 0; i < possibleKeys.length; i++) {
-    if (userCommand.includes(possibleKeys[i])) {
-      let command = possibleKeys[i];
-      locations[currentArea].actions[command]();
-    }
-  }
+createLocations(
+  "forest",
+  { onPlayerEnter: "You are in a forest" },
+  ["knife"],
+  ["clearing"],
+  { knife: "You pick up the knife", clearing: "You leave the forest" }
+);
 
-  userCommand.value = "";
-}
-
-function showText(text, source = "game") {
-  let display = document.querySelector("#text-display");
-
-  let sourceFormatting = "";
-  if (source === "user") {
-    sourceFormatting = " > ";
-  }
-  let messageHTML = `<br />${sourceFormatting}${text}`;
-
-  display.innerHTML += messageHTML;
-}
-
-function movePlayer(location) {
-  locations.playerLocation = location;
-}
+createLocations(
+  "clearing",
+  { onPlayerEnter: "You are in a clearing" },
+  ["berries"],
+  ["forest"],
+  { forest: "You leave the clearing" }
+);
 
 let enterButton = document.querySelector("#user-text-submit");
-enterButton.addEventListener("click", readUserCommand);
+
+enterButton.addEventListener("click", playerScreen.showInTextDisplay);
