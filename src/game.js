@@ -38,11 +38,21 @@ let playerScreen = {
   playerTextInput: document.querySelector("#user-text-input"),
   playerCommand: "",
   textDisplay: document.querySelector("#text-display"),
-  showInTextDisplay(event) {
+  showInTextDisplay(userInput, message) {
+    let format = "";
+    if (userInput === true) {
+      format = ">";
+    }
+    playerScreen.textDisplay.innerHTML += `<br />${format} ${message}`;
+  },
+
+  readUserInput(event) {
     event.preventDefault();
-    let format = "hey";
-    let message = "hi";
-    playerScreen.textDisplay.innerHTML += `<br />${format}${message}`;
+    let command = playerScreen.playerTextInput.value;
+    if (command.trim() === "") {
+    } else {
+      playerScreen.showInTextDisplay(true, command);
+    }
   },
 };
 
@@ -64,4 +74,4 @@ createLocations(
 
 let enterButton = document.querySelector("#user-text-submit");
 
-enterButton.addEventListener("click", playerScreen.showInTextDisplay);
+enterButton.addEventListener("click", playerScreen.readUserInput);
