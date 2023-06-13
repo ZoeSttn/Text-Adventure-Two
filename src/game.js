@@ -16,18 +16,19 @@ function createLocations(
   displayText,
   items,
   accessibleLocations,
-  actions
+  actions,
+  mapArrayIndex
 ) {
   let loc = new MapLocations(displayText, items, accessibleLocations, actions);
-  map.mapLocations[name] = loc;
+  map.locations[name] = loc;
 }
 
 let map = {
-  mapLocations: {},
+  locations: {},
 };
 
 let player = {
-  currentLocation: "clearing",
+  currentLocation: { place: "forest", order: 0 },
 
   updatePlayerLocation(newLocation) {
     player.currentLocation = newLocation;
@@ -53,6 +54,17 @@ let playerScreen = {
     } else {
       playerScreen.showInTextDisplay(true, command);
     }
+
+    //Compare command to keys in current location object
+    let possibleCommands = Object.keys(
+      map.locations[player.currentLocation.place]
+    );
+    for (let i = 0; i < possibleCommands.length; i++) {
+      if (command.includes(possibleCommands[i])) {
+        let command = possibleKeys[i];
+      }
+    }
+    console.log(possibleCommands);
   },
 };
 
@@ -61,7 +73,15 @@ createLocations(
   { onPlayerEnter: "You are in a forest" },
   ["knife"],
   ["clearing"],
-  { knife: "You pick up the knife", clearing: "You leave the forest" }
+  {
+    //Was working on this
+    knife: {
+      display: "You pick up the knife",
+      invokeAction: function () {},
+    },
+    clearing: "You leave the forest",
+  },
+  0
 );
 
 createLocations(
@@ -69,7 +89,8 @@ createLocations(
   { onPlayerEnter: "You are in a clearing" },
   ["berries"],
   ["forest"],
-  { forest: "You leave the clearing" }
+  { forest: "You leave the clearing" },
+  1
 );
 
 let enterButton = document.querySelector("#user-text-submit");
